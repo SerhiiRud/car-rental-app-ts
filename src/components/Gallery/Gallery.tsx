@@ -1,8 +1,8 @@
-import PropTypes from "prop-types";
 import CarCard from "../CarCard/CarCard";
 import { Container } from "./Gallery.styled";
+import { TGallery } from "../../interfaces/Gallery.type";
 
-const Gallery = ({ cars, visibleCars, setFavorite }) => {
+const Gallery = ({ cars, visibleCars, setFavorite }: TGallery) => {
   const carsToShow = visibleCars.filter(
     (obj, index) =>
       visibleCars.findIndex(
@@ -21,11 +21,6 @@ const Gallery = ({ cars, visibleCars, setFavorite }) => {
       </Container>
     </>
   );
-};
-
-Gallery.propTypes = {
-  cars: PropTypes.array.isRequired,
-  setFavorite: PropTypes.func.isRequired,
 };
 
 export default Gallery;

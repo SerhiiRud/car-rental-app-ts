@@ -3,19 +3,19 @@ import { useState } from "react";
 import { lazy, Suspense } from "react";
 import { GlobalStyle } from "./GlobalStyle";
 import Loader from "./Loader";
+import { TCar } from "../interfaces/Car.type";
 
 const Home = lazy(() => import("../pages/Home"));
-const Sidebar = lazy(() => import("../components/Sidebar"));
+const Sidebar = lazy(() => import("./Sidebar"));
 const Catalog = lazy(() => import("../pages/Catalog"));
 const Favorites = lazy(() => import("../pages/Favorites"));
 
 export const App = () => {
-  const [cars, setCars] = useState([]);
+  const [cars, setCars] = useState<TCar[]>([]);
 
-  const favoriteToggle = (e) => {
+  const favoriteToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     const id = Number(e.currentTarget.id);
-
-    const updatedCars = cars.map((car) => ({
+    const updatedCars = cars.map((car: TCar) => ({
       ...car,
       favorite: car.id === id ? !car.favorite : car.favorite,
     }));

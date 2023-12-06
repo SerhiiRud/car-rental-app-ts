@@ -21,10 +21,11 @@ import {
   CloseButton,
 } from "./CarModal.styled";
 import icon from "../../images/svg/sprite.svg";
+import { TCarModal } from "../../interfaces/CarModal.type";
 
 const modalRoot = document.querySelector("#modal-root");
 
-const CarModal = ({ car, onCloseModal }) => {
+const CarModal = ({ car, onCloseModal }: TCarModal) => {
   const {
     id,
     address,
@@ -58,22 +59,22 @@ const CarModal = ({ car, onCloseModal }) => {
   const personAge = personeConditions[0].split(": ")[1];
 
   const onEsc = useCallback(
-    (event) => {
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (event.code === "Escape") onCloseModal();
     },
     [onCloseModal]
   );
 
-  const handleBackdropClick = (event) => {
+  const handleBackdropClick = (event: React.MouseEvent<HTMLDivElement>) => {
     if (event.currentTarget === event.target) onCloseModal();
   };
 
   useEffect(() => {
-    window.addEventListener("keydown", onEsc);
+    window.addEventListener("keydown", () => onEsc);
     document.body.style.overflow = "hidden";
 
     return () => {
-      window.removeEventListener("keydown", onEsc);
+      window.removeEventListener("keydown", () => onEsc);
       document.body.style.overflow = "auto";
     };
   }, [onEsc]);
@@ -126,7 +127,7 @@ const CarModal = ({ car, onCloseModal }) => {
         </ModalContainer>
       </Modal>
     </Backdrop>,
-    modalRoot
+    modalRoot as HTMLElement
   );
 };
 
