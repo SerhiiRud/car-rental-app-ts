@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { fetchAPI, limit } from "../../services/API";
-import PropTypes from "prop-types";
 import FilterBar from "../../components/FilterBar/FilterBar";
 import Gallery from "../../components/Gallery";
 import Loader from "../../components/Loader";
 import { Container, Button } from "./Catalog.styled";
+import { TCatalog } from "../../interfaces/Catalog.type";
+import { TCar } from "../../interfaces/Car.type";
 
-const Catalog = ({ cars, setCars, favoriteToggle }) => {
+const Catalog = ({ cars, setCars, favoriteToggle }: TCatalog) => {
   const [page, setPage] = useState(1);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [visibleCars, setVisibleCars] = useState([]);
+  const [visibleCars, setVisibleCars] = useState<TCar[]>([]);
 
   const ERROR_MSG = "Error happend";
 
@@ -19,17 +20,19 @@ const Catalog = ({ cars, setCars, favoriteToggle }) => {
       try {
         setIsLoading(true);
         const favoriteCars = localStorage.getItem("favs")
-          ? JSON.parse(localStorage.getItem("favs")).map((fav) => fav.id)
+          ? JSON.parse(localStorage.getItem("favs") || "{}").map(
+              (fav: TCar) => fav.id
+            )
           : [];
         const res = await fetchAPI(page);
-        const favoritedCars = res.data.map((car) => ({
+        const favoritedCars = res.data.map((car: TCar) => ({
           ...car,
           favorite: favoriteCars.includes(car.id) ? true : false,
         }));
 
         setCars((prev) => [...prev, ...favoritedCars]);
       } catch (error) {
-        setError(ERROR_MSG);
+        if (error instanceof Error) setError(ERROR_MSG);
       } finally {
         setIsLoading(false);
       }
@@ -59,12 +62,6 @@ const Catalog = ({ cars, setCars, favoriteToggle }) => {
       )}
     </Container>
   );
-};
-
-Catalog.propTypes = {
-  cars: PropTypes.array.isRequired,
-  setCars: PropTypes.func.isRequired,
-  favoriteToggle: PropTypes.func.isRequired,
 };
 
 export default Catalog;

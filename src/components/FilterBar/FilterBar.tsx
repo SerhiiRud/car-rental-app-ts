@@ -11,11 +11,12 @@ import {
   Input,
   SearchButton,
 } from "./FilterBar.styled";
+import { TFilterBar } from "../../interfaces/FilterBar.type";
 
 const MAXPRICE = 500;
 const MAXMILEAGE = 1000000;
 
-const FilterBar = ({ setVisibleCars, cars }) => {
+const FilterBar = ({ setVisibleCars, cars }: TFilterBar) => {
   const [brandSelectOpen, setBrandSelectOpen] = useState(false);
   const [priceSelectOpen, setPriceSelectOpen] = useState(false);
 
@@ -35,25 +36,26 @@ const FilterBar = ({ setVisibleCars, cars }) => {
     setPriceSelectOpen(false);
   };
 
-  const handleSearch = (evt) => {
+  const handleSearch = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
+    const filterForm = evt.target as HTMLFormElement;
     const makeSearch =
-      evt.target.make.value === "All" ? "" : evt.target.make.value;
+      filterForm.make.value === "All" ? "" : filterForm.make.value;
 
     const priceSearch =
-      evt.target.price.value === "All"
+      filterForm.price.value === "All"
         ? MAXPRICE
-        : Number(evt.target.price.value);
+        : Number(filterForm.price.value);
 
     const mileageFrom =
-      evt.target.mileageFrom.value.length === 0
+      filterForm.mileageFrom.value.length === 0
         ? 0
-        : Number(evt.target.mileageFrom.value);
+        : Number(filterForm.mileageFrom.value);
 
     const mileageTo =
-      evt.target.mileageTo.value.length === 0
+      filterForm.mileageTo.value.length === 0
         ? MAXMILEAGE
-        : Number(evt.target.mileageTo.value);
+        : Number(filterForm.mileageTo.value);
 
     const carsToShow = cars.filter(
       (car) =>
@@ -86,8 +88,8 @@ const FilterBar = ({ setVisibleCars, cars }) => {
               onBlur={handleBrandSelectChange}
               onChange={handleBrandSelectChange}
             >
-              <option defaultValue>All</option>
-              {makeSelection(cars).map((make) => (
+              <option defaultValue="All">All</option>
+              {makeSelection(cars).map((make: string) => (
                 <option value={make} key={make}>
                   {make}
                 </option>
@@ -111,7 +113,7 @@ const FilterBar = ({ setVisibleCars, cars }) => {
               onBlur={handlePriceSelectChange}
               onChange={handlePriceSelectChange}
             >
-              <option defaultValue>All</option>
+              <option defaultValue="All">All</option>
               {priceSelection(30, MAXPRICE, 10).map((price) => (
                 <option value={price} key={price}>
                   To {price}$
